@@ -1,0 +1,97 @@
+\ switch
+\ ( test -- r:0 r:test )
+\ 
+\ Starts a 'switch' statement block
+\
+\ This implementation of switch is quite similar to C, except that:
+\ 1) Every case statement must end with a 'break'
+\ 2) There is no ability to omit the 'break' and 'fall through' to
+\    subsequent case statements
+\ 3) The whole 'switch' statement block must end with 'endswitch'
+\
+\ Example:
+\
+\    : fred ( n -- )
+\        switch
+\          0 case
+\            ." zero" cr
+\            break
+\          1 case
+\            ." one" cr
+\            break
+\          default
+\            ." something else" cr
+\            break
+\        endswitch
+\    ;
+
+
+: switch ( val -- r:0 r:val )
+    postpone false 
+    postpone swap
+    postpone 2>r
+; immediate
+
+
+
+\ case
+\ ( r:flag r:test x -- r:flag` r:test )
+\
+\ A branch of a 'switch' statement. See 'switch'
+
+
+: case  ( r:flag r:val -- val flag )
+    postpone r@ postpone =   ( r:flag r:val =if )
+    postpone if              ( r:flag r:val )
+      postpone 2r>           ( flag val )
+      postpone nip           ( val )
+      postpone true          ( val true )
+      postpone swap
+      postpone 2>r           ( r:true r:val )
+; immediate
+
+
+
+\ break
+\ ( r:flag r:test -- r:flag r:test )
+\
+\ Terminates a 'case' branch of a 'switch' statement block
+\ See 'switch'
+
+
+: break                ( -- )
+    postpone endif     ( r:flag r:test )
+; immediate
+
+
+
+\ default
+\ ( -- )
+\
+\ Forms the 'default' branch of a 'switch' statement block.
+\ Encloses code that only gets executed if none of the prior 'case'..'break'
+\ branches were executed.
+
+
+: default             ( r:flag r:val -- r:flag r:val )
+    postpone r>       ( r:flag val )
+    postpone r@       ( r:flag val flag )
+    postpone swap     ( r:flag flag val )
+    postpone >r       ( r:flag r:val flag )
+    postpone 0=       ( r:flag r:val ~flag )
+    postpone if       ( r:flag r:val )
+; immediate
+
+
+\ endswitch
+\ ( r:flag r:test -- )
+\
+\ Terminates a 'switch' statement block.
+\ See 'switch'.
+
+
+: endswitch
+   postpone 2r> postpone 2drop
+; immediate
+
+

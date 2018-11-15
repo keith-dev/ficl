@@ -1,4 +1,20 @@
-rel 3.01 -- 2001
+rel 3.02 -- December 2001
+
+Fixed a bug in "environment?" - was ignoring the length of the supplied string.
+"my=[" detects object members (using ?object) and assumes all other members leave class unchanged
+Added "objectify" and "?object" for use by OO infrastructure
+Ficl OO tutorial expanded and revised. Thanks to David McNab for his demo and suggestions.
+Consolidated context and pExtend pointers of FICL_SYSTEM - VM's pExtend pointer
+  is initialized from the copy in FICL_SYSTEM upon VM creation.
+Ficlwin character handling is more robust
+SEE improvements - SEE (and consequently DEBUG) have improved source listings
+  with instruction offsets
+Corrected various bugs in docs. 
+Added ficl-ized version of JV Noble's Forth Primer
+Ficlwin uses multi-system constructs (see ficlthread.c)
+MEMORY-EXT environment variable removed (there is no such wordset)
+
+rel 3.01 -- October 2001
 
 Major contribs by Larry Hastings (larry@hastings.org)
 - FILE wordset

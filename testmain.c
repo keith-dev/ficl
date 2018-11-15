@@ -1,6 +1,6 @@
 /*
 ** stub main for testing FICL under Win32
-** $Id: testmain.c,v 1.11 2001/11/05 02:09:28 jsadler Exp $
+** $Id: testmain.c,v 1.13 2001/12/05 07:21:34 jsadler Exp $
 */
 /*
 ** Copyright (c) 1997-2001 John Sadler (john_sadler@alum.mit.edu)
