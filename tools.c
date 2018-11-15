@@ -3,7 +3,7 @@
 ** Forth Inspired Command Language - programming tools
 ** Author: John Sadler (john_sadler@alum.mit.edu)
 ** Created: 20 June 2000
-** $Id: tools.c,v 1.11 2001/12/05 07:21:34 jsadler Exp $
+** $Id: tools.c,v 1.11 2001-12-04 17:58:14-08 jsadler Exp jsadler $
 *******************************************************************/
 /*
 ** Copyright (c) 1997-2001 John Sadler (john_sadler@alum.mit.edu)
@@ -238,10 +238,17 @@ static void seeColon(FICL_VM *pVM, CELL *pc)
                 break;                                                           
             case BRANCH:
                 c = *++pc;
-                if (c.i > 0)
-                    sprintf(cp, "else (branch %d)",       pc+c.i-param0);
-                else
+                if (c.i == 0)
                     sprintf(cp, "repeat (branch %d)",     pc+c.i-param0);
+                else if (c.i == 1)
+                    sprintf(cp, "else (branch %d)",       pc+c.i-param0);
+				else
+                    sprintf(cp, "endof (branch %d)",       pc+c.i-param0);
+                break;
+
+            case OF:
+                c = *++pc;
+                sprintf(cp, "of (branch %d)",       pc+c.i-param0);
                 break;
 
             case QDO:

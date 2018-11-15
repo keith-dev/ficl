@@ -6,7 +6,7 @@
 ** Implementations of FICL external interface functions... 
 **
 ** (simple) port to Linux, Skip Carter 26 March 1998
-** $Id: sysdep.c,v 1.12 2001/12/05 07:21:34 jsadler Exp $
+** $Id: sysdep.c,v 1.9 2001-07-23 22:01:24-07 jsadler Exp jsadler $
 *******************************************************************/
 /*
 ** Copyright (c) 1997-2001 John Sadler (john_sadler@alum.mit.edu)

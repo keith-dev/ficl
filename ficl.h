@@ -4,7 +4,7 @@
 ** Author: John Sadler (john_sadler@alum.mit.edu)
 ** Created: 19 July 1997
 ** Dedicated to RHS, in loving memory
-** $Id: ficl.h,v 1.18 2001/12/05 07:21:34 jsadler Exp $
+** $Id: ficl.h,v 1.19 2001-12-04 17:58:07-08 jsadler Exp jsadler $
 *******************************************************************/
 /*
 ** Copyright (c) 1997-2001 John Sadler (john_sadler@alum.mit.edu)
@@ -236,7 +236,7 @@ typedef struct ficl_system_info FICL_SYSTEM_INFO;
 /* 
 ** the Good Stuff starts here...
 */
-#define FICL_VER    "3.02"
+#define FICL_VER    "3.03"
 #if !defined (FICL_PROMPT)
 #define FICL_PROMPT "ok> "
 #endif
@@ -854,7 +854,7 @@ struct ficl_system
 	FICL_WORD *pDoesParen;
 	FICL_WORD *pExitInner;
 	FICL_WORD *pExitParen;
-	FICL_WORD *pIfParen;
+	FICL_WORD *pBranch0;
 	FICL_WORD *pInterpret;
 	FICL_WORD *pLitParen;
 	FICL_WORD *pTwoLitParen;
@@ -862,7 +862,9 @@ struct ficl_system
 	FICL_WORD *pPLoopParen;
 	FICL_WORD *pQDoParen;
 	FICL_WORD *pSemiParen;
+	FICL_WORD *pOfParen;
 	FICL_WORD *pStore;
+	FICL_WORD *pDrop;
 	FICL_WORD *pCStringLit;
 	FICL_WORD *pStringLit;
 
@@ -1075,6 +1077,7 @@ typedef enum
     IF,
     LITERAL,
     LOOP,
+    OF,
     PLOOP,
     PRIMITIVE,
     QDO,

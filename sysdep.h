@@ -9,7 +9,7 @@
 ** FICL_ROBUST is enabled. This may require some consideration
 ** in firmware systems since assert often
 ** assumes stderr/stdout.  
-** $Id: sysdep.h,v 1.11 2001/12/05 07:21:34 jsadler Exp $
+** $Id: sysdep.h,v 1.11 2001-11-11 12:25:46-08 jsadler Exp jsadler $
 *******************************************************************/
 /*
 ** Copyright (c) 1997-2001 John Sadler (john_sadler@alum.mit.edu)

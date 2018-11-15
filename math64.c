@@ -5,7 +5,7 @@
 ** Created: 25 January 1998
 ** Rev 2.03: Support for 128 bit DP math. This file really ouught to
 ** be renamed!
-** $Id: math64.c,v 1.9 2001/12/05 07:21:34 jsadler Exp $
+** $Id: math64.c,v 1.6 2001-05-16 07:56:16-07 jsadler Exp jsadler $
 *******************************************************************/
 /*
 ** Copyright (c) 1997-2001 John Sadler (john_sadler@alum.mit.edu)
