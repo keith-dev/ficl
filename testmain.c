@@ -1,6 +1,6 @@
 /*
 ** stub main for testing FICL under Win32
-** $Id: testmain.c,v 1.9 2001-05-10 07:47:30-07 jsadler Exp jsadler $
+** $Id: testmain.c,v 1.10 2001-06-12 01:24:37-07 jsadler Exp jsadler $
 */
 /*
 ** Copyright (c) 1997-2001 John Sadler (john_sadler@alum.mit.edu)
@@ -228,7 +228,7 @@ static void ficlLoad(FICL_VM *pVM)
 */
 static void spewHash(FICL_VM *pVM)
 {
-    FICL_HASH *pHash = ficlGetDict()->pForthWords;
+    FICL_HASH *pHash = vmGetDict(pVM)->pForthWords;
     FICL_WORD *pFW;
     FILE *pOut;
     unsigned i;
@@ -291,16 +291,16 @@ static void clocksPerSec(FICL_VM *pVM)
 }
 
 
-void buildTestInterface()
+void buildTestInterface(FICL_SYSTEM *pSys)
 {
-    ficlBuild("break",    ficlBreak,    FW_DEFAULT);
-    ficlBuild("clock",    ficlClock,    FW_DEFAULT);
-    ficlBuild("cd",       ficlChDir,    FW_DEFAULT);
-    ficlBuild("load",     ficlLoad,     FW_DEFAULT);
-    ficlBuild("pwd",      ficlGetCWD,   FW_DEFAULT);
-    ficlBuild("system",   ficlSystem,   FW_DEFAULT);
-    ficlBuild("spewhash", spewHash,     FW_DEFAULT);
-    ficlBuild("clocks/sec", 
+    ficlBuild(pSys, "break",    ficlBreak,    FW_DEFAULT);
+    ficlBuild(pSys, "clock",    ficlClock,    FW_DEFAULT);
+    ficlBuild(pSys, "cd",       ficlChDir,    FW_DEFAULT);
+    ficlBuild(pSys, "load",     ficlLoad,     FW_DEFAULT);
+    ficlBuild(pSys, "pwd",      ficlGetCWD,   FW_DEFAULT);
+    ficlBuild(pSys, "system",   ficlSystem,   FW_DEFAULT);
+    ficlBuild(pSys, "spewhash", spewHash,     FW_DEFAULT);
+    ficlBuild(pSys, "clocks/sec", 
                                 clocksPerSec, FW_DEFAULT);
 
     return;
@@ -320,9 +320,11 @@ int main(int argc, char **argv)
     int ret = 0;
     char in[nINBUF];
     FICL_VM *pVM;
-    ficlInitSystem(10000);
-    buildTestInterface();
-    pVM = ficlNewVM();
+	FICL_SYSTEM *pSys;
+
+    pSys = ficlInitSystem(10000);
+    buildTestInterface(pSys);
+    pVM = ficlNewVM(pSys);
 
     ret = ficlExec(pVM, ".ver .( " __DATE__ " ) cr quit");
 
@@ -357,7 +359,7 @@ int main(int argc, char **argv)
         }
     }
 
-    ficlTermSystem();
+    ficlTermSystem(pSys);
     return 0;
 }
 

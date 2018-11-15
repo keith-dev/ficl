@@ -3,7 +3,7 @@
 ** Forth Inspired Command Language - dictionary methods
 ** Author: John Sadler (john_sadler@alum.mit.edu)
 ** Created: 19 July 1997
-** $Id: dict.c,v 1.10 2001-05-17 06:51:25-07 jsadler Exp jsadler $
+** $Id: dict.c,v 1.11 2001-06-12 01:24:31-07 jsadler Exp jsadler $
 *******************************************************************/
 /*
 ** This file implements the dictionary -- FICL's model of 
@@ -461,7 +461,7 @@ void dictEmpty(FICL_DICT *pDict, unsigned nHash)
 **************************************************************************/
 void dictHashSummary(FICL_VM *pVM)
 {
-    FICL_DICT *dp = ficlGetDict();
+    FICL_DICT *dp = vmGetDict(pVM);
     FICL_HASH *pFHash;
     FICL_WORD **pHash;
     unsigned size;
@@ -566,15 +566,16 @@ FICL_WORD *dictLookup(FICL_DICT *pDict, STRINGINFO si)
 
 
 /**************************************************************************
-                        d i c t L o o k u p L o c
+                        f i c l L o o k u p L o c
 ** Same as dictLookup, but looks in system locals dictionary first...
 ** Assumes locals dictionary has only one wordlist...
 **************************************************************************/
 #if FICL_WANT_LOCALS
-FICL_WORD *dictLookupLoc(FICL_DICT *pDict, STRINGINFO si)
+FICL_WORD *ficlLookupLoc(FICL_SYSTEM *pSys, STRINGINFO si)
 {
     FICL_WORD *pFW = NULL;
-    FICL_HASH *pHash = ficlGetLoc()->pForthWords;
+	FICL_DICT *pDict = pSys->dp;
+    FICL_HASH *pHash = ficlGetLoc(pSys)->pForthWords;
     int i;
     UNS16 hashCode   = hashHashCode(si);
 

@@ -6,7 +6,7 @@
 ** Implementations of FICL external interface functions... 
 **
 ** (simple) port to Linux, Skip Carter 26 March 1998
-** $Id: sysdep.c,v 1.7 2001-05-16 07:56:14-07 jsadler Exp jsadler $
+** $Id: sysdep.c,v 1.9 2001-07-23 22:01:24-07 jsadler Exp jsadler $
 *******************************************************************/
 /*
 ** Copyright (c) 1997-2001 John Sadler (john_sadler@alum.mit.edu)
@@ -324,10 +324,8 @@ int ficlLockDictionary(short fLock)
 
 #if PORTABLE_LONGMULDIV == 0
 
-#ifdef riscos
 typedef unsigned long long __u64;
 typedef unsigned long __u32;
-#endif
 
 DPUNS ficlLongMul(FICL_UNS x, FICL_UNS y)
 {

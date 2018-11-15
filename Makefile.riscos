@@ -6,14 +6,15 @@ CFLAGS= -O -c -mstubs -D__UNAME
 CC=gcc
 LIB = makealf -qls -o
 
-MAJOR = 2
-MINOR = 0.3
+MAJOR = 3
+MINOR = 0.0
 
 lib: o.libficl
+
+ficl: testmain.o ficl.h sysdep.h o.libficl
+	$(CC) testmain.o -o ficl -L. -lficl -lm
 
 # static library build
 o.libficl: $(OBJECTS)
         $(LIB) o.libficl $(OBJECTS)
 
-testmain: testmain.o ficl.h sysdep.h libficl.so.$(MAJOR).$(MINOR)
-        $(CC) testmain.o -o testmain -L. -lficl -luname

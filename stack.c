@@ -3,7 +3,7 @@
 ** Forth Inspired Command Language
 ** Author: John Sadler (john_sadler@alum.mit.edu)
 ** Created: 16 Oct 1997
-** $Id: stack.c,v 1.6 2001-05-16 07:56:15-07 jsadler Exp jsadler $
+** $Id: stack.c,v 1.7 2001-06-12 01:24:35-07 jsadler Exp jsadler $
 *******************************************************************/
 /*
 ** Copyright (c) 1997-2001 John Sadler (john_sadler@alum.mit.edu)
@@ -292,7 +292,7 @@ void stackPushINT(FICL_STACK *pStack, FICL_INT i)
 }
 
 #if (FICL_WANT_FLOAT)
-void stackPushFloat(FICL_STACK *pStack, float f)
+void stackPushFloat(FICL_STACK *pStack, FICL_FLOAT f)
 {
     *pStack->sp++ = LVALUEtoCELL(f);
 }

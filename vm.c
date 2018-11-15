@@ -3,7 +3,7 @@
 ** Forth Inspired Command Language - virtual machine methods
 ** Author: John Sadler (john_sadler@alum.mit.edu)
 ** Created: 19 July 1997
-** $Id: vm.c,v 1.9 2001-05-16 07:56:13-07 jsadler Exp jsadler $
+** $Id: vm.c,v 1.10 2001-06-12 01:24:40-07 jsadler Exp jsadler $
 *******************************************************************/
 /*
 ** This file implements the virtual machine of FICL. Each virtual
@@ -157,6 +157,17 @@ void vmInnerLoop(FICL_VM *pVM)
     M_INNER_LOOP(pVM);
 }
 #endif
+
+
+/**************************************************************************
+                        v m G e t D i c t
+** Returns the address dictionary for this VM's system
+**************************************************************************/
+FICL_DICT  *vmGetDict(FICL_VM *pVM)
+{
+	assert(pVM);
+	return pVM->pSys->dp;
+}
 
 
 /**************************************************************************
