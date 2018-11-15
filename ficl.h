@@ -4,7 +4,7 @@
 ** Author: John Sadler (john_sadler@alum.mit.edu)
 ** Created: 19 July 1997
 ** Dedicated to RHS, in loving memory
-** $Id: //depot/gamejones/ficl/ficl.h#33 $
+** $Id: ficl.h,v 1.25 2010/10/03 09:52:12 asau Exp $
 ********************************************************************
 **
 ** Copyright (c) 1997-2001 John Sadler (john_sadler@alum.mit.edu)
@@ -165,8 +165,10 @@ extern "C" {
 	#include "ficlplatform/win32.h"
 #elif defined (FREEBSD_ALPHA)
 	#include "ficlplatform/alpha.h"
-#elif defined(linux)
+#elif defined(unix) || defined(__unix__) || defined(__unix)
 	#include "ficlplatform/unix.h"
+#else /* catch-all */
+	#include "ficlplatform/ansi.h"
 #endif /* platform */
 
 
@@ -396,7 +398,7 @@ extern "C" {
 ** FICL_PLATFORM_HAS_2INTEGER
 ** Indicates whether or not the current architecture
 ** supports a native double-width integer type.
-** If you set this to 1 in your ficlplatform/*.h file,
+** If you set this to 1 in your ficlplatform/ *.h file,
 ** you *must* create typedefs for the following two types:
 **        ficl2Unsigned
 **        ficl2Integer
@@ -608,7 +610,7 @@ typedef struct ficlString ficlString;
 
 /*
 ** System dependent routines:
-** Edit the implementations in your appropriate ficlplatform/*.c to be
+** Edit the implementations in your appropriate ficlplatform/ *.c to be
 ** compatible with your runtime environment.
 **
 ** ficlCallbackDefaultTextOut sends a zero-terminated string to the 
@@ -630,7 +632,7 @@ FICL_PLATFORM_EXTERN void *ficlRealloc(void *p, size_t size);
 /* 
 ** the Good Stuff starts here...
 */
-#define FICL_VERSION    "4.0.31"
+#define FICL_VERSION    "4.1.0"
 
 #if !defined (FICL_PROMPT)
 #define FICL_PROMPT		"ok> "
@@ -647,7 +649,7 @@ FICL_PLATFORM_EXTERN void *ficlRealloc(void *p, size_t size);
 
 
 #if !defined FICL_IGNORE     /* Macro to silence unused param warnings */
-#define FICL_IGNORE(x) &x
+#define FICL_IGNORE(x) (void)x
 #endif /*  !defined FICL_IGNORE */
 
 
@@ -1025,7 +1027,7 @@ FICL_PLATFORM_EXTERN void ficlCompatibilityTextOutCallback(ficlCallback *callbac
 ** and words are (more or less) arrays of these constants.  In Ficl
 ** these constants are an enumerated type called ficlInstruction.
 */
-typedef enum
+enum ficlInstruction
 {
     #define FICL_TOKEN(token, description) token,
     #define FICL_INSTRUCTION_TOKEN(token, description, flags) token,
@@ -1036,7 +1038,8 @@ typedef enum
     ficlInstructionLast,
 
     ficlInstructionFourByteTrick = 0x10000000
-} ficlInstruction;
+};
+typedef intptr_t ficlInstruction;
 
 
 /* 
@@ -1514,7 +1517,7 @@ FICL_PLATFORM_EXTERN ficlWord        *ficlDictionaryFindEnclosingWord(ficlDictio
 #if FICL_MULTITHREAD
 FICL_PLATFORM_EXTERN int ficlDictionaryLock(ficlDictionary *dictionary, short lockIncrement);
 #else
-#define ficlDictionaryLock(dictionary, lock) 0 /* ignore */
+#define ficlDictionaryLock(dictionary, lock) (void)0 /* ignore */
 #endif
 
 

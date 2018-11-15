@@ -2,9 +2,9 @@ OBJECTS= dictionary.o system.o fileaccess.o float.o double.o prefix.o search.o s
 HEADERS= ficl.h ficlplatform/unix.h
 #
 # Flags for shared library
-TARGET= -Dlinux  # riscos MOTO_CPU32 
+#TARGET= -Dlinux  # riscos MOTO_CPU32 
 SHFLAGS = -fPIC
-CFLAGS= -O $(SHFLAGS)
+CFLAGS= -O $(SHFLAGS) -Wall
 CPPFLAGS= $(TARGET) -I.
 CC = cc
 LIB = ar cr
@@ -14,7 +14,7 @@ MAJOR = 4
 MINOR = 1.0
 
 ficl: main.o $(HEADERS) libficl.a
-	$(CC) main.o -o ficl -L. -lficl -lm
+	$(CC) $(CFLAGS) $(LDFLAGS) main.o -o ficl -L. -lficl -lm
 
 lib: libficl.so.$(MAJOR).$(MINOR)
 
@@ -25,16 +25,20 @@ libficl.a: $(OBJECTS)
 
 # shared library build
 libficl.so.$(MAJOR).$(MINOR): $(OBJECTS)
-	$(CC) -shared -Wl,-soname,libficl.so.$(MAJOR).$(MINOR) \
+	$(CC) $(LDFLAGS) -shared -Wl,-soname,libficl.so.$(MAJOR).$(MINOR) \
 	-o libficl.so.$(MAJOR).$(MINOR) $(OBJECTS)
 	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so
 
 main: main.o ficl.h sysdep.h libficl.so.$(MAJOR).$(MINOR)
-	$(CC) main.o -o main -L. -lficl -lm
+	$(CC) $(CFLAGS) $(LDFLAGS) main.o -o main -L. -lficl -lm
 	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so.$(MAJOR)
 
+# depend explicitly to help finding source files in another subdirectory,
+# and repeat commands since gmake doesn't understand otherwise
+ansi.o: ficlplatform/ansi.c $(HEADERS)
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c -o $@ $<
 unix.o: ficlplatform/unix.c $(HEADERS)
-	$(CC) $(CFLAGS) $(CPPFLAGS) -c -o $@ ficlplatform/unix.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c -o $@ $<
 
 #
 #       generic object code
@@ -53,4 +57,4 @@ unix.o: ficlplatform/unix.c $(HEADERS)
 #       generic cleanup code
 #
 clean:
-	rm -f *.o *.a libficl.*
+	rm -f *.o *.a libficl.* ficl

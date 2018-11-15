@@ -1,6 +1,6 @@
 /*
 ** stub main for testing Ficl
-** $Id: //depot/gamejones/ficl/main.c#2 $
+** $Id: main.c,v 1.2 2010/09/10 09:01:28 asau Exp $
 */
 /*
 ** Copyright (c) 1997-2001 John Sadler (john_sadler@alum.mit.edu)
@@ -67,8 +67,8 @@ int main(int argc, char **argv)
 
     while (returnValue != FICL_VM_STATUS_USER_EXIT)
     {
-	    fputs(FICL_PROMPT, stdout);
-        fgets(buffer, sizeof(buffer), stdin);
+        fputs(FICL_PROMPT, stdout);
+        if (fgets(buffer, sizeof(buffer), stdin) == NULL) break;
         returnValue = ficlVmEvaluate(vm, buffer);
     }
 

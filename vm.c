@@ -3,7 +3,7 @@
 ** Forth Inspired Command Language - virtual machine methods
 ** Author: John Sadler (john_sadler@alum.mit.edu)
 ** Created: 19 July 1997
-** $Id: //depot/gamejones/ficl/vm.c#27 $
+** $Id: vm.c,v 1.17 2010/09/13 18:43:04 asau Exp $
 *******************************************************************/
 /*
 ** This file implements the virtual machine of Ficl. Each virtual
@@ -470,7 +470,7 @@ AGAIN:
 		#define POP_CELL_POINTER_DOUBLE(cp)  cell = (cp); *cell = *dataTop--; cell[1] = *dataTop--; continue
 		#define POP_CELL_POINTER(cp)         cell = (cp); *cell = *dataTop--; continue
 
-		#define BRANCH()         ip += *(int *)ip; continue
+		#define BRANCH()         ip += *(ficlInteger *)ip; continue
 		#define EXIT_FUNCTION()  ip = (ficlInstruction *)((returnTop--)->p); continue
 
 #endif /* FICL_WANT_SIZE */
@@ -1199,14 +1199,14 @@ COMPARE:
 				uMin = (u1 < u2)? u1 : u2;
 				for ( ; (uMin > 0) && (n == 0); uMin--)
 				{
-					char c1 = *cp1++;
-					char c2 = *cp2++;
+					int c1 = (unsigned char)*cp1++;
+					int c2 = (unsigned char)*cp2++;
 					if (i)
 					{
-						c1 = (char)tolower(c1);
-						c2 = (char)tolower(c2);
+						c1 = tolower(c1);
+						c2 = tolower(c2);
 					}
-					n = (int)(c1 - c2);
+					n = (c1 - c2);
 				}
 
 				if (n == 0)
@@ -2302,7 +2302,7 @@ FMINUSROLL:
 				*/
 				if ((ficlInstruction)fw->code < ficlInstructionLast)
 				{
-					instruction = (int)fw->code;
+					instruction = (ficlInstruction)fw->code;
 					goto AGAIN;
 				}
 
@@ -2401,7 +2401,7 @@ ficlString ficlVmGetWord0(ficlVm *vm)
 		if (trace == stop)
 			break;
 		c = *trace;
-		if (isspace(c))
+		if (isspace((unsigned char)c))
 			break;
         length++;
 		trace++;
@@ -2409,7 +2409,7 @@ ficlString ficlVmGetWord0(ficlVm *vm)
 
     FICL_STRING_SET_LENGTH(s, length);
 
-    if ((trace != stop) && isspace(c))    /* skip one trailing delimiter */
+    if ((trace != stop) && isspace((unsigned char)c))    /* skip one trailing delimiter */
         trace++;
 
     ficlVmUpdateTib(vm, trace);
@@ -2901,12 +2901,12 @@ int ficlVmParseNumber(ficlVm *vm, ficlString s)
     }
 
     if (length == 0)        /* detect "+", "-", ".", "+." etc */
-        return FICL_FALSE;
+        return 0; /* false */
 
     while ((length--) && ((c = *trace++) != '\0'))
     {
         if (!isalnum(c))
-            return FICL_FALSE;
+            return 0; /* false */
 
         digit = c - '0';
 
@@ -2914,7 +2914,7 @@ int ficlVmParseNumber(ficlVm *vm, ficlString s)
             digit = tolower(c) - 'a' + 10;
 
         if (digit >= base)
-            return FICL_FALSE;
+            return 0; /* false */
 
         accumulator = accumulator * base + digit;
     }
@@ -2929,7 +2929,7 @@ int ficlVmParseNumber(ficlVm *vm, ficlString s)
     if (vm->state == FICL_VM_STATE_COMPILE)
         ficlPrimitiveLiteralIm(vm);
 
-    return FICL_TRUE;
+    return 1; /* true */
 }
 
 
@@ -3059,7 +3059,7 @@ int ficlVmParseWord(ficlVm *vm, ficlString name)
             }
 
             ficlVmExecuteWord(vm, tempFW);
-            return FICL_TRUE;
+            return 1; /* true */
         }
     }
 
@@ -3078,11 +3078,11 @@ int ficlVmParseWord(ficlVm *vm, ficlString name)
 				else
 	                ficlDictionaryAppendCell(dictionary, FICL_LVALUE_TO_CELL(tempFW));
             }
-            return FICL_TRUE;
+            return 1; /* true */
         }
     }
 
-    return FICL_FALSE;
+    return 0; /* false */
 }
 
 

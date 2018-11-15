@@ -3,7 +3,7 @@
 ** Forth Inspired Command Language
 ** Author: John Sadler (john_sadler@alum.mit.edu)
 ** Created: 16 Oct 1997
-** $Id: //depot/gamejones/ficl/stack.c#10 $
+** $Id: stack.c,v 1.11 2010/08/12 13:57:22 asau Exp $
 *******************************************************************/
 /*
 ** Copyright (c) 1997-2001 John Sadler (john_sadler@alum.mit.edu)

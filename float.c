@@ -4,7 +4,7 @@
 ** ANS Forth FLOAT word-set written in C
 ** Author: Guy Carver & John Sadler (john_sadler@alum.mit.edu)
 ** Created: Apr 2001
-** $Id: //depot/gamejones/ficl/float.c#15 $
+** $Id: float.c,v 1.10 2010/09/13 18:43:04 asau Exp $
 *******************************************************************/
 /*
 ** Copyright (c) 1997-2001 John Sadler (john_sadler@alum.mit.edu)
@@ -404,12 +404,12 @@ int ficlVmParseFloatNumber( ficlVm *vm, ficlString s)
 
 static void ficlPrimitiveFLocalParen(ficlVm *vm)
 {
-   ficlLocalParen(vm, FICL_FALSE, FICL_TRUE);
+   ficlLocalParen(vm, 0, 1);
 }
 
 static void ficlPrimitiveF2LocalParen(ficlVm *vm)
 {
-   ficlLocalParen(vm, FICL_TRUE, FICL_TRUE);
+   ficlLocalParen(vm, 1, 1);
 }
 
 #endif /* FICL_WANT_LOCALS */

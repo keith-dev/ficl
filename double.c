@@ -7,7 +7,7 @@
 ** Created: 25 January 1998
 ** Rev 2.03: Support for 128 bit DP math. This file really ouught to
 ** be renamed!
-** $Id: //depot/gamejones/ficl/double.c#6 $
+** $Id: double.c,v 1.2 2010/09/12 15:18:07 asau Exp $
 *******************************************************************/
 /*
 ** Copyright (c) 1997-2001 John Sadler (john_sadler@alum.mit.edu)
@@ -44,6 +44,8 @@
 ** SUCH DAMAGE.
 */
 
+#include <stdint.h>
+
 #include "ficl.h"
 
 
@@ -69,7 +71,7 @@ ficl2UnsignedQR ficl2UnsignedDivide(ficl2Unsigned q, ficlUnsigned y)
 #else  /* FICL_PLATFORM_HAS_2INTEGER */
 
 
-#define FICL_CELL_HIGH_BIT  (1L << (FICL_BITS_PER_CELL-1))
+#define FICL_CELL_HIGH_BIT  ((uintmax_t)1 << (FICL_BITS_PER_CELL-1))
 #define UMOD_SHIFT (FICL_BITS_PER_CELL / 2)
 #define UMOD_MASK ((1L << (FICL_BITS_PER_CELL / 2)) - 1)
 

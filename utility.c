@@ -1,3 +1,5 @@
+#include <ctype.h>
+
 #include "ficl.h"
 
 
@@ -9,7 +11,7 @@
 void *ficlAlignPointer(void *ptr)
 {
 #if FICL_PLATFORM_ALIGNMENT > 1
-	int p = (int)ptr;
+	intptr_t p = (intptr_t)ptr;
 	if (p & (FICL_PLATFORM_ALIGNMENT - 1))
 		ptr = (void *)((p & ~(FICL_PLATFORM_ALIGNMENT - 1)) + FICL_PLATFORM_ALIGNMENT);
 #endif
@@ -172,8 +174,8 @@ char *ficlStringCaseFold(char *cp)
 
     while (*cp)
     {
-        if (isupper(*cp))
-            *cp = (char)tolower(*cp);
+        if (isupper((unsigned char)*cp))
+            *cp = (char)tolower((unsigned char)*cp);
         cp++;
     }
 
@@ -191,7 +193,7 @@ int ficlStrincmp(char *cp1, char *cp2, ficlUnsigned count)
 
     for (; 0 < count; ++cp1, ++cp2, --count)
     {
-        i = tolower(*cp1) - tolower(*cp2);
+        i = tolower((unsigned char)*cp1) - tolower((unsigned char)*cp2);
         if (i != 0)
             return i;
         else if (*cp1 == '\0')
@@ -211,7 +213,7 @@ char *ficlStringSkipSpace(char *cp, char *end)
 {
     FICL_ASSERT(NULL, cp);
 
-    while ((cp != end) && isspace(*cp))
+    while ((cp != end) && isspace((unsigned char)*cp))
         cp++;
 
     return cp;
@@ -228,13 +230,13 @@ void ficlCompatibilityTextOutCallback(ficlCallback *callback, char *text, ficlCo
 
 	if (text == NULL)
 	{
-		outputFunction(callback->vm, NULL, FICL_FALSE);
+		outputFunction(callback->vm, NULL, 0 /* false */);
 		return;
 	}
 
 	while (*text)
 	{
-		int newline = FICL_FALSE;
+		int newline = 0 /* false */;
 		char *trace = buffer;
 		while ((*text) && (trace < bufferStop))
 		{
@@ -246,7 +248,7 @@ void ficlCompatibilityTextOutCallback(ficlCallback *callback, char *text, ficlCo
 					continue;
 				case '\n':
 					text++;
-					newline = FICL_TRUE;
+					newline = !0 /* true */;
 					break;
 				default:
 					*trace++ = *text++;

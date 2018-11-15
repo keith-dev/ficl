@@ -3,7 +3,7 @@
 ** Forth Inspired Command Language - external interface
 ** Author: John Sadler (john_sadler@alum.mit.edu)
 ** Created: 19 July 1997
-** $Id: //depot/gamejones/ficl/system.c#12 $
+** $Id: system.c,v 1.2 2010/09/10 10:35:54 asau Exp $
 *******************************************************************/
 /*
 ** This is an ANS Forth interpreter written in C.
@@ -131,10 +131,10 @@ ficlSystem *ficlSystemCreate(ficlSystemInformation *fsi)
 	callback.system = NULL;
 	callback.vm = NULL;
 
-    FICL_ASSERT(&callback, sizeof(ficlInteger) == sizeof(void *));
-    FICL_ASSERT(&callback, sizeof(ficlUnsigned) == sizeof(void *));
+    FICL_ASSERT(&callback, sizeof(ficlInteger) >= sizeof(void *));
+    FICL_ASSERT(&callback, sizeof(ficlUnsigned) >= sizeof(void *));
 #if (FICL_WANT_FLOAT)
-    FICL_ASSERT(&callback, sizeof(ficlFloat) == sizeof(void *));
+    FICL_ASSERT(&callback, sizeof(ficlFloat) <= sizeof(ficlInteger));
 #endif
 
     system = ficlMalloc(sizeof(ficlSystem));

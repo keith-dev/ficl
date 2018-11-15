@@ -4,7 +4,7 @@
 ** Parser extensions for Ficl
 ** Authors: Larry Hastings & John Sadler (john_sadler@alum.mit.edu)
 ** Created: April 2001
-** $Id: //depot/gamejones/ficl/prefix.c#11 $
+** $Id: prefix.c,v 1.8 2010/09/13 18:43:04 asau Exp $
 *******************************************************************/
 /*
 ** Copyright (c) 1997-2001 John Sadler (john_sadler@alum.mit.edu)
@@ -78,7 +78,7 @@ int ficlVmParsePrefix(ficlVm *vm, ficlString s)
     ** If forth-wordlist is not in the search order, we won't find the prefixes.
     */
     if (!word)
-        return FICL_FALSE;
+        return 0; /* false */
 
     hash = (ficlHash *)(word->param[0].p);
     /*
@@ -101,13 +101,13 @@ int ficlVmParsePrefix(ficlVm *vm, ficlString s)
                 ficlVmSetTibIndex(vm, s.text + n - vm->tib.text);
                 ficlVmExecuteWord(vm, word);
 
-                return FICL_TRUE;
+                return 1; /* true */
             }
             word = word->link;
         }
     }
 
-    return FICL_FALSE;
+    return 0; /* false */
 }
 
 

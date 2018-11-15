@@ -3,7 +3,7 @@
 ** Forth Inspired Command Language - dictionary methods
 ** Author: John Sadler (john_sadler@alum.mit.edu)
 ** Created: 19 July 1997
-** $Id: //depot/gamejones/ficl/dictionary.c#14 $
+** $Id: dictionary.c,v 1.2 2010/09/12 15:14:52 asau Exp $
 *******************************************************************/
 /*
 ** This file implements the dictionary -- Ficl's model of 
@@ -306,7 +306,7 @@ ficlWord *ficlDictionarySetConstantString(ficlDictionary *dictionary, char *name
 {
     ficlString s;
     ficl2Integer valueAs2Integer;
-    FICL_2INTEGER_SET(strlen(value), (int)value, valueAs2Integer);
+    FICL_2INTEGER_SET(strlen(value), (intptr_t)value, valueAs2Integer);
     FICL_STRING_SET_FROM_CSTRING(s, name);
 
 	return ficlDictionarySet2ConstantInstruction(dictionary, s, ficlInstruction2ConstantParen, valueAs2Integer);

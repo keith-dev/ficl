@@ -4,7 +4,7 @@
 ** ANS Forth SEARCH and SEARCH-EXT word-set written in C
 ** Author: John Sadler (john_sadler@alum.mit.edu)
 ** Created: 6 June 2000
-** $Id: //depot/gamejones/ficl/search.c#9 $
+** $Id: search.c,v 1.10 2010/08/12 13:57:22 asau Exp $
 *******************************************************************/
 /*
 ** Copyright (c) 1997-2001 John Sadler (john_sadler@alum.mit.edu)

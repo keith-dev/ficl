@@ -3,7 +3,7 @@
 ** Forth Inspired Command Language - programming tools
 ** Author: John Sadler (john_sadler@alum.mit.edu)
 ** Created: 20 June 2000
-** $Id: //depot/gamejones/ficl/tools.c#20 $
+** $Id: tools.c,v 1.12 2010/08/12 13:57:22 asau Exp $
 *******************************************************************/
 /*
 ** Copyright (c) 1997-2001 John Sadler (john_sadler@alum.mit.edu)
