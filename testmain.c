@@ -1,6 +1,6 @@
 /*
 ** stub main for testing FICL under Win32
-** $Id: testmain.c,v 1.10 2001-06-12 01:24:37-07 jsadler Exp jsadler $
+** $Id: testmain.c,v 1.11 2001/11/05 02:09:28 jsadler Exp $
 */
 /*
 ** Copyright (c) 1997-2001 John Sadler (john_sadler@alum.mit.edu)
@@ -326,7 +326,7 @@ int main(int argc, char **argv)
     buildTestInterface(pSys);
     pVM = ficlNewVM(pSys);
 
-    ret = ficlExec(pVM, ".ver .( " __DATE__ " ) cr quit");
+    ret = ficlEvaluate(pVM, ".ver .( " __DATE__ " ) cr quit");
 
     /*
     ** load file from cmd line...
@@ -336,7 +336,7 @@ int main(int argc, char **argv)
         sprintf(in, ".( loading %s ) cr load %s\n cr", argv[1], argv[1]);
         __try
         {
-            ret = ficlExec(pVM, in);
+            ret = ficlEvaluate(pVM, in);
         }
         __except(1)
         {

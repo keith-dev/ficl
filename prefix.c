@@ -4,7 +4,7 @@
 ** Parser extensions for Ficl
 ** Authors: Larry Hastings & John Sadler (john_sadler@alum.mit.edu)
 ** Created: April 2001
-** $Id: prefix.c,v 1.3 2001-06-12 01:24:38-07 jsadler Exp jsadler $
+** $Id: prefix.c,v 1.4 2001/11/05 02:09:28 jsadler Exp $
 *******************************************************************/
 /*
 ** Copyright (c) 1997-2001 John Sadler (john_sadler@alum.mit.edu)
@@ -179,7 +179,7 @@ void ficlCompilePrefix(FICL_SYSTEM *pSys)
     dictAppendWord(dp, "0x", prefixHex, FW_DEFAULT);
     dictAppendWord(dp, "0d", prefixTen, FW_DEFAULT);
 #if (FICL_EXTENDED_PREFIX)
-    pFW = ficlLookup("\\");
+    pFW = ficlLookup(pSys, "\\");
     if (pFW)
     {
         dictAppendWord(dp, "//", pFW->code, FW_DEFAULT);
@@ -187,6 +187,5 @@ void ficlCompilePrefix(FICL_SYSTEM *pSys)
 #endif
     dp->pCompile = pPrevCompile;
 
-    ficlAddPrecompiledParseStep(pSys, "?prefix", ficlParsePrefix);
     return;
 }

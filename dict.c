@@ -3,7 +3,7 @@
 ** Forth Inspired Command Language - dictionary methods
 ** Author: John Sadler (john_sadler@alum.mit.edu)
 ** Created: 19 July 1997
-** $Id: dict.c,v 1.11 2001-06-12 01:24:31-07 jsadler Exp jsadler $
+** $Id: dict.c,v 1.12 2001/11/05 02:09:28 jsadler Exp $
 *******************************************************************/
 /*
 ** This file implements the dictionary -- FICL's model of 
@@ -459,6 +459,7 @@ void dictEmpty(FICL_DICT *pDict, unsigned nHash)
 ** addressing scheme (i.e. collisions resolved by searching the
 ** table for an empty slot) for a given size table.
 **************************************************************************/
+#if FICL_WANT_FLOAT
 void dictHashSummary(FICL_VM *pVM)
 {
     FICL_DICT *dp = vmGetDict(pVM);
@@ -522,7 +523,7 @@ void dictHashSummary(FICL_VM *pVM)
 
     return;
 }
-
+#endif
 
 /**************************************************************************
                         d i c t I n c l u d e s

@@ -3,7 +3,7 @@
 ** Forth Inspired Command Language - virtual machine methods
 ** Author: John Sadler (john_sadler@alum.mit.edu)
 ** Created: 19 July 1997
-** $Id: vm.c,v 1.10 2001-06-12 01:24:40-07 jsadler Exp jsadler $
+** $Id: vm.c,v 1.11 2001/11/05 02:09:28 jsadler Exp $
 *******************************************************************/
 /*
 ** This file implements the virtual machine of FICL. Each virtual
@@ -440,18 +440,6 @@ void vmSetTextOut(FICL_VM *pVM, OUTFUNC textOut)
 
     return;
 }
-
-
-/**************************************************************************
-                        v m S t e p
-** Single step the vm - equivalent to "step into" - used for debugging
-**************************************************************************/
-#if FICL_WANT_DEBUGGER
-void vmStep(FICL_VM *pVM)
-{
-    M_VM_STEP(pVM);
-}
-#endif
 
 
 /**************************************************************************

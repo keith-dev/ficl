@@ -127,10 +127,12 @@ print <<EOF
 void ficlCompileSoftCore(FICL_SYSTEM *pSys)
 {
     FICL_VM *pVM = pSys->vmList;
+    CELL id = pVM->sourceID;
     int ret = sizeof (softWords);
-	assert(pVM);
-
+    assert(pVM);
+    pVM->sourceID.i = -1;
     ret = ficlExec(pVM, softWords);
+    pVM->sourceID = id;
     if (ret == VM_ERREXIT)
         assert(FALSE);
     return;
