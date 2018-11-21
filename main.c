@@ -41,14 +41,44 @@
 #include <stdlib.h>
 
 #include "ficl.h"
+#ifdef FICL_WANT_LIBEDIT
+  #include <edit/readline/readline.h>
 
+  #if FICL_WANT_LIBEDIT > 1
+    #include <histedit.h>
+
+    char * prompt(EditLine *e) {
+        return FICL_PROMPT;
+    }
+  #endif
+#endif
 
 int main(int argc, char **argv)
 {
     int returnValue = 0;
     char buffer[256];
     ficlVm *vm;
-	ficlSystem *system;
+    ficlSystem *system;
+    char *input;
+#ifdef FICL_WANT_LIBEDIT
+  #if FICL_WANT_LIBEDIT > 1
+    int inputlen;
+    EditLine *el;
+    History *hist;
+    HistEvent ev;
+
+    el = el_init(argv[0], stdin, stdout, stderr);
+    el_set(el, EL_PROMPT, &prompt);
+    el_set(el, EL_EDITOR, "emacs");
+
+    hist = history_init();
+    if (hist)
+    {
+        history(hist, &ev, H_SETSIZE, 800);
+        el_set(el, EL_HIST, history, hist);
+    }
+  #endif
+#endif
 
     system = ficlSystemCreate(NULL);
     ficlSystemCompileExtras(system);
@@ -67,12 +97,32 @@ int main(int argc, char **argv)
 
     while (returnValue != FICL_VM_STATUS_USER_EXIT)
     {
+#ifdef FICL_WANT_LIBEDIT
+  #if FICL_WANT_LIBEDIT == 1
+        input = readline(FICL_PROMPT);
+        if (!input) break;
+  #else
+        input = (char*)el_gets(el, &inputlen);
+        if (inputlen == 0) break;
+        if (hist) history(hist, &ev, H_ENTER, input);
+  #endif
+#else
         fputs(FICL_PROMPT, stdout);
         if (fgets(buffer, sizeof(buffer), stdin) == NULL) break;
-        returnValue = ficlVmEvaluate(vm, buffer);
+        input = buffer;
+#endif
+
+        returnValue = ficlVmEvaluate(vm, input);
     }
 
     ficlSystemDestroy(system);
+
+#ifdef FICL_WANT_LIBEDIT
+  #if FICL_WANT_LIBEDIT > 1
+    history_end(hist);
+    el_end(el);
+  #endif
+#endif
     return 0;
 }
 
