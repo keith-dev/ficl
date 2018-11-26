@@ -42,7 +42,7 @@
 
 #include "ficl.h"
 #ifdef FICL_WANT_LIBEDIT
-  #include <edit/readline/readline.h>
+  #include <readline.h>
 
   #if FICL_WANT_LIBEDIT > 1
     #include <histedit.h>
