@@ -1,11 +1,7 @@
 #----------------------------------------------------------------------------
-.POSIX:
-
 MAJOR = 4
 MINOR = 1.0
 
-SRCS = dictionary.c system.c fileaccess.c float.c double.c prefix.c search.c softcore.c stack.c tools.c vm.c primitives.c bit.c lzuncompress.c ficlplatform/unix.c utility.c hash.c callback.c word.c extras.c
-HEADERS = ficl.h ficlplatform/unix.h
 OBJS = $(SRCS:.c=.o)
 SHOBJS = $(SRCS:.c=.os)
 
@@ -28,7 +24,7 @@ main: main.o ficl.h libficl.so
 
 lib: libficl.a libficl.so
 
-libficl.a: $(OBJS)
+libficl.a: $(HEADERS) $(OBJS)
 	$(LIB) libficl.a $(OBJS)
 	$(RANLIB) libficl.a
 

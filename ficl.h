@@ -192,6 +192,44 @@ extern "C" {
 #endif
 
 #if FICL_WANT_MINIMAL
+
+#ifdef FICL_WANT_SOFTWORDS
+#undef FICL_WANT_SOFTWORDS
+#endif
+#ifdef FICL_WANT_FILE
+#undef FICL_WANT_FILE
+#endif
+#ifdef FICL_WANT_FLOAT
+#undef FICL_WANT_FLOAT
+#endif
+#ifdef FICL_WANT_USER
+#undef FICL_WANT_USER
+#endif
+#ifdef FICL_WANT_LOCALS
+#undef FICL_WANT_LOCALS
+#endif
+#ifdef FICL_WANT_OOP
+#undef FICL_WANT_DEBUGGER
+#endif
+#ifdef FICL_WANT_OOP
+#undef FICL_WANT_OOP
+#endif
+#ifdef FICL_WANT_PLATFORM
+#undef FICL_WANT_PLATFORM
+#endif
+#ifdef FICL_WANT_MULTITHREADED
+#undef FICL_WANT_MULTITHREADED
+#endif
+#ifdef FICL_WANT_EXTENDED_PREFIX
+#undef FICL_WANT_EXTENDED_PREFIX
+#endif
+//#ifdef FICL_PLATFORM_HAS_2INTEGER
+//#undef FICL_PLATFORM_HAS_2INTEGER
+//#endif
+#ifdef FICL_ROBUST
+#undef FICL_ROBUST
+#endif
+
 #define FICL_WANT_SOFTWORDS        (0)
 #define FICL_WANT_FILE             (0)
 #define FICL_WANT_FLOAT            (0)
@@ -202,7 +240,7 @@ extern "C" {
 #define FICL_WANT_PLATFORM         (0)
 #define FICL_WANT_MULTITHREADED    (0)
 #define FICL_WANT_EXTENDED_PREFIX  (0)
-
+//#define FICL_PLATFORM_HAS_2INTEGER (1)
 #define FICL_ROBUST                (0)
 
 #endif /* FICL_WANT_MINIMAL */
