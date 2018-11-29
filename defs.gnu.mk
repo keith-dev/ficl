@@ -273,8 +273,8 @@ endif
 #    LIBEDIT_PATH_INC custom path to editline's readline.h
 #    LIBEDIT_PATH_LIB custom path to libedline.so
 ifdef FICL_WANT_LIBEDIT
-LIBEDIT_PATH_INC ?= /usr/local/include/edit/readline
-LIBEDIT_PATH_LIB ?= /usr/lib
-LDADD += -L$(LIBEDIT_PATH_LIB) -ledit
-CFLAGS += -I$(LIBEDIT_PATH_INC) -DFICL_WANT_LIBEDIT=$(FICL_WANT_LIBEDIT)
+LIBEDIT_PATH_INC += -I /usr/local/include/
+LIBEDIT_PATH_LIB += -L /usr/lib
+LDADD += $(LIBEDIT_PATH_LIB) -ledit
+CFLAGS += $(LIBEDIT_PATH_INC) -DFICL_WANT_LIBEDIT=$(FICL_WANT_LIBEDIT)
 endif

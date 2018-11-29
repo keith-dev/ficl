@@ -39,17 +39,22 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
 #include "ficl.h"
+
 #ifdef FICL_WANT_LIBEDIT
-  #include <readline.h>
+  //#include <readline.h>
+  #include <editline.h>
 
   #if FICL_WANT_LIBEDIT > 1
+    #include <unistd.h>
+    #include <string.h>
+    #include <errno.h>
     #include <histedit.h>
 
-    char * prompt(EditLine *e) {
-        return FICL_PROMPT;
-    }
+    static char * prompt(EditLine *e);
+
+    static void save_history(History* hist, HistEvent* ev);
+    static void restore_history(History* hist, HistEvent* ev);
   #endif
 #endif
 
@@ -75,6 +80,7 @@ int main(int argc, char **argv)
     if (hist)
     {
         history(hist, &ev, H_SETSIZE, 800);
+        restore_history(hist, &ev);
         el_set(el, EL_HIST, history, hist);
     }
   #endif
@@ -119,6 +125,7 @@ int main(int argc, char **argv)
 
 #ifdef FICL_WANT_LIBEDIT
   #if FICL_WANT_LIBEDIT > 1
+    save_history(hist, &ev);
     history_end(hist);
     el_end(el);
   #endif
@@ -126,3 +133,86 @@ int main(int argc, char **argv)
     return 0;
 }
 
+#ifdef FICL_WANT_LIBEDIT
+  #if FICL_WANT_LIBEDIT > 1
+    static char* filename_history;
+    static char* build_filename_history();
+
+    char * prompt(EditLine *e) {
+        return FICL_PROMPT;
+    }
+
+    char* build_filename_history() {
+        char filename[] = "/.ficl_history";
+        size_t homesz = 64;
+        char* home = calloc(homesz, sizeof(char));
+        char* ehome = getenv("HOME");
+        char* p;
+        size_t homelen;
+
+        if (ehome) {
+            while (strncpy(home, ehome, homesz)[homesz - 1]) {
+                p = realloc(home, homesz * 2);
+                if (!p)
+                    return NULL;
+                home = p;
+                memset(home + homesz, 0, 2 * homesz);
+                homesz *= 2;
+            }
+        }
+        else {
+            while (!getcwd(home, homesz)) {
+                if (errno == ERANGE) {
+                    p = realloc(home, homesz * 2);
+                    if (!p)
+                        return NULL;
+                    home = p;
+                    memset(home + homesz, 0, 2 * homesz);
+                    homesz *= 2;
+                    continue;
+                }
+                else if (errno)
+                    return NULL;
+                break;
+            }
+        }
+
+        homelen = strlen(home);
+        if (homesz - homelen < sizeof(filename)) {
+            p = realloc(home, homelen + sizeof(filename));
+            if (!p)
+                return NULL;
+            homesz = homelen + sizeof(filename);
+            home = strncat(p, filename, homesz);
+        }
+        else {
+            homesz = homelen + sizeof(filename);
+            strncat(home, filename, homesz);
+            home = realloc(home, homesz);
+        }
+
+        return home;
+    }
+
+    void save_history(History* hist, HistEvent* ev) {
+        if (!hist || !ev)
+            return;
+        if (!filename_history && !((filename_history = build_filename_history())))
+            return;
+
+        history(hist, ev, H_SAVE, filename_history);
+    }
+
+    void restore_history(History* hist, HistEvent* ev) {
+        if (!hist || !ev)
+            return;
+        if (!filename_history && !((filename_history = build_filename_history())))
+            return;
+
+        history(hist, ev, H_LOAD, filename_history);
+
+        free(filename_history);
+        filename_history = NULL;
+    }
+  #endif
+#endif
