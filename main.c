@@ -42,7 +42,6 @@
 #include "ficl.h"
 
 #ifdef FICL_WANT_LIBEDIT
-  //#include <readline.h>
   #include <editline.h>
 
   #if FICL_WANT_LIBEDIT > 1
@@ -64,9 +63,9 @@ int main(int argc, char **argv)
     char buffer[256];
     ficlVm *vm;
     ficlSystem *system;
-    char *input;
 #ifdef FICL_WANT_LIBEDIT
   #if FICL_WANT_LIBEDIT > 1
+    char *input;
     int inputlen;
     EditLine *el;
     History *hist;
@@ -97,7 +96,7 @@ int main(int argc, char **argv)
     */
     if (argc  > 1)
     {
-        sprintf(buffer, ".( loading %s ) cr load %s\n cr", argv[1], argv[1]);
+        snprintf(buffer, sizeof(buffer), ".( loading %s ) cr load %s\n cr", argv[1], argv[1]);
         returnValue = ficlVmEvaluate(vm, buffer);
     }
 
@@ -120,6 +119,7 @@ int main(int argc, char **argv)
 
         returnValue = ficlVmEvaluate(vm, input);
     }
+    printf("\n");
 
     ficlSystemDestroy(system);
 
@@ -130,68 +130,48 @@ int main(int argc, char **argv)
     el_end(el);
   #endif
 #endif
+
     return 0;
 }
 
 #ifdef FICL_WANT_LIBEDIT
   #if FICL_WANT_LIBEDIT > 1
+    #ifndef MAXPATHLEN
+    #define MAXPATHLEN 1024
+    #endif
+
     static char* filename_history;
     static char* build_filename_history();
 
-    char * prompt(EditLine *e) {
+    char* prompt(EditLine *e) {
         return FICL_PROMPT;
     }
 
     char* build_filename_history() {
+        size_t len;
+        char* buf;
+        char* ret;
+        char* env = getenv("HOME");
         char filename[] = "/.ficl_history";
-        size_t homesz = 64;
-        char* home = calloc(homesz, sizeof(char));
-        char* ehome = getenv("HOME");
-        char* p;
-        size_t homelen;
 
-        if (ehome) {
-            while (strncpy(home, ehome, homesz)[homesz - 1]) {
-                p = realloc(home, homesz * 2);
-                if (!p)
-                    return NULL;
-                home = p;
-                memset(home + homesz, 0, 2 * homesz);
-                homesz *= 2;
-            }
+        if (env) {
+            len = strlen(env) + sizeof(filename);
+            buf = calloc(len, sizeof(char));
+            strcpy(buf, env);
+            strcat(buf, filename);
+            return buf;
         }
         else {
-            while (!getcwd(home, homesz)) {
-                if (errno == ERANGE) {
-                    p = realloc(home, homesz * 2);
-                    if (!p)
-                        return NULL;
-                    home = p;
-                    memset(home + homesz, 0, 2 * homesz);
-                    homesz *= 2;
-                    continue;
-                }
-                else if (errno)
-                    return NULL;
-                break;
-            }
-        }
-
-        homelen = strlen(home);
-        if (homesz - homelen < sizeof(filename)) {
-            p = realloc(home, homelen + sizeof(filename));
-            if (!p)
+            len = MAXPATHLEN + sizeof(filename);
+            buf = calloc(len, sizeof(char));
+            ret = getcwd(buf, len);
+            if (ret == NULL) {
+                free(buf);
                 return NULL;
-            homesz = homelen + sizeof(filename);
-            home = strncat(p, filename, homesz);
+            }
+            len = strlen(buf) + 1;
+            return realloc(buf, len);
         }
-        else {
-            homesz = homelen + sizeof(filename);
-            strncat(home, filename, homesz);
-            home = realloc(home, homesz);
-        }
-
-        return home;
     }
 
     void save_history(History* hist, HistEvent* ev) {
