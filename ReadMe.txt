@@ -51,3 +51,9 @@ LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
 OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 SUCH DAMAGE.
 
+------------------------------------------------------------------------------
+
+FICL 4.1.0-libedit
+October 2018
+
+Has revised build system for Linux and BSD.
