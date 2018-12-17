@@ -325,6 +325,7 @@ ficlWord *ficlDictionaryAppendWord(ficlDictionary *dictionary,
                            ficlPrimitive code,
                            ficlUnsigned8 flags)
 {
+    fprintf(stderr, "*ficlDictionaryAppendWord(dictionary=%p, name=%u:%.*s code=%p flags=0x02x) : ", dictionary, name.length, name.length, name.text, code, flags);
     ficlUnsigned8 length  = (ficlUnsigned8)FICL_STRING_GET_LENGTH(name);
     char *nameCopy;
     ficlWord *word;
@@ -353,6 +354,7 @@ ficlWord *ficlDictionaryAppendWord(ficlDictionary *dictionary,
         ficlDictionaryUnsmudge(dictionary);
 
     ficlDictionaryLock(dictionary, FICL_FALSE);
+    fprintf(stderr, "word=%p\n", word);
     return word;
 }
 
