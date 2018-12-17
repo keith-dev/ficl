@@ -137,41 +137,41 @@ void ficlVmDestroy(ficlVm *vm)
 **************************************************************************/
 void ficlVmExecuteWord(ficlVm *vm, ficlWord *pWord)
 {
-	ficlVmInnerLoop(vm, pWord);
+    ficlVmInnerLoop(vm, pWord);
     return;
 }
 
 
 
 static void ficlVmOptimizeJumpToJump(ficlVm *vm, ficlIp ip)
-	{
-	ficlIp destination;
-	switch ((ficlInstruction)(*ip))
-		{
-		case ficlInstructionBranchParenWithCheck:
-			*ip = (ficlWord *)ficlInstructionBranchParen;
-			goto RUNTIME_FIXUP;
+{
+    ficlIp destination;
+    switch ((ficlInstruction)(*ip))
+    {
+        case ficlInstructionBranchParenWithCheck:
+            *ip = (ficlWord *)ficlInstructionBranchParen;
+            goto RUNTIME_FIXUP;
 
-		case ficlInstructionBranch0ParenWithCheck:
-			*ip = (ficlWord *)ficlInstructionBranch0Paren;
+        case ficlInstructionBranch0ParenWithCheck:
+            *ip = (ficlWord *)ficlInstructionBranch0Paren;
 RUNTIME_FIXUP:
-			ip++;
-			destination = ip + *(int *)ip;
-			switch ((ficlInstruction)*destination)
-			{
-				case ficlInstructionBranchParenWithCheck:
-					/* preoptimize where we're jumping to */
-					ficlVmOptimizeJumpToJump(vm, destination);
-				case ficlInstructionBranchParen:
-				{
-					destination++;
-					destination += *(int *)destination;
-					*ip = (ficlWord *)(destination - ip);
-					break;
-				}
-			}
-		}
-	}
+            ip++;
+            destination = ip + *(int *)ip;
+            switch ((ficlInstruction)*destination)
+            {
+                case ficlInstructionBranchParenWithCheck:
+                    /* preoptimize where we're jumping to */
+                    ficlVmOptimizeJumpToJump(vm, destination);
+                case ficlInstructionBranchParen:
+                {
+                    destination++;
+                    destination += *(int *)destination;
+                    *ip = (ficlWord *)(destination - ip);
+                    break;
+                }
+            }
+    }
+}
 
 /**************************************************************************
                         v m I n n e r L o o p
@@ -2302,10 +2302,12 @@ FMINUSROLL:
 				*/
 				if ((ficlInstruction)fw->code < ficlInstructionLast)
 				{
+                    fprintf(stderr, "ficlVmInnerLoop: fetch: code=%p\n", fw->code);
 					instruction = (ficlInstruction)fw->code;
 					goto AGAIN;
 				}
 
+                fprintf(stderr, "ficlVmInnerLoop: execute: code=%p\n", fw->code);
 				LOCAL_VARIABLE_SPILL;
 				(vm)->runningWord = fw;
 				fw->code(vm);
@@ -2696,10 +2698,10 @@ int ficlVmExecuteString(ficlVm *vm, ficlString s)
     ficlSystem *system = vm->callback.system;
     ficlDictionary   *dictionary   = system->dictionary;
 
-    int        except;
+    volatile int except;
     jmp_buf    vmState;
     jmp_buf   *oldState;
-    ficlTIB        saveficlTIB;
+    ficlTIB    saveficlTIB;
 
     FICL_VM_ASSERT(vm, vm);
     FICL_VM_ASSERT(vm, system->interpreterLoop[0]);
@@ -2727,6 +2729,7 @@ int ficlVmExecuteString(ficlVm *vm, ficlString s)
         }
 
         ficlVmInnerLoop(vm, 0);
+        fprintf(stderr, "ficlVmExecuteString: ficlVmInnerLoop(vm, 0) returned\n");
         break;
 
     case FICL_VM_STATUS_RESTART:
