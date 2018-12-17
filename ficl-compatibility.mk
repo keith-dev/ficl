@@ -19,6 +19,6 @@ SRCS = \
   hash.c \
   callback.c \
   word.c \
-  compatiblity.c \
+  compatibility.c \
   extras.c
 HEADERS = ficl.h ficlplatform/unix.h

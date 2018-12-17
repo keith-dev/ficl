@@ -63,9 +63,9 @@ int main(int argc, char **argv)
     char buffer[256];
     ficlVm *vm;
     ficlSystem *system;
+    char *input;
 #ifdef FICL_WANT_LIBEDIT
   #if FICL_WANT_LIBEDIT > 1
-    char *input;
     int inputlen;
     EditLine *el;
     History *hist;
