@@ -46,7 +46,7 @@
 #endif
 #include <sys/types.h>
 #include <sys/stat.h>
-#ifdef linux
+#if defined (unix)
 #include <unistd.h>
 #endif
 

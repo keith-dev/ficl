@@ -7,6 +7,10 @@
 #include "ficl.h"
 
 #if FICL_WANT_FILE
+#if FICL_HAVE_FTRUNCATE
+#include <unistd.h>
+#endif /* FICL_HAVE_FTRUNCATE */
+
 /*
 **
 ** fileaccess.c
@@ -411,12 +415,12 @@ void ficlCompileFile(FICL_SYSTEM *pSys)
     dictAppendWord(dp, "delete-file", ficlDeleteFile,  FW_DEFAULT);
     dictAppendWord(dp, "rename-file", ficlRenameFile,  FW_DEFAULT);
 
-#ifdef FICL_HAVE_FTRUNCATE
+#if FICL_HAVE_FTRUNCATE
     dictAppendWord(dp, "resize-file", ficlResizeFile,  FW_DEFAULT);
+#endif /* FICL_HAVE_FTRUNCATE */
 
     ficlSetEnv(pSys, "file", FICL_TRUE);
     ficlSetEnv(pSys, "file-ext", FICL_TRUE);
-#endif /* FICL_HAVE_FTRUNCATE */
 #else
     &pSys;
 #endif /* FICL_WANT_FILE */
