@@ -325,7 +325,8 @@ ficlWord *ficlDictionaryAppendWord(ficlDictionary *dictionary,
                            ficlPrimitive code,
                            ficlUnsigned8 flags)
 {
-    fprintf(stderr, "*ficlDictionaryAppendWord(dictionary=%p, name=%u:%.*s code=%p flags=0x02x) : ", dictionary, name.length, name.length, name.text, code, flags);
+    fprintf(stderr, "ficlDictionaryAppendWord(dictionary=%p, name=%u:%.*s code=%p flags=0x%02x) : ",
+        dictionary, name.length, name.length, name.text, code, flags);
     ficlUnsigned8 length  = (ficlUnsigned8)FICL_STRING_GET_LENGTH(name);
     char *nameCopy;
     ficlWord *word;
@@ -343,7 +344,7 @@ ficlWord *ficlDictionaryAppendWord(ficlDictionary *dictionary,
     word->code     = code;
 	word->semiParen = ficlInstructionSemiParen;
     word->flags    = (ficlUnsigned8)(flags | FICL_WORD_SMUDGED);
-    word->length    = length;
+    word->length   = length;
     word->name     = nameCopy;
     /*
     ** Point "here" to first ficlCell of new word's param area...
